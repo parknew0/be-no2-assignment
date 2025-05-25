@@ -100,5 +100,37 @@ public class ScheduleRepositoryLv1 {
         return null;
     }
 
+    public void updateSchedule(ScheduleLv1 schedule) {
+        String sql = "UPDATE schedule SET TITLE = ?, WRITER = ?, MODIFIED_AT = ? WHERE SCHEDULE_ID = ?";
+
+        try (Connection conn = ConnectionManagerLv1.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, schedule.getTitle());
+            pstmt.setString(2, schedule.getWriter());
+            pstmt.setObject(3, schedule.getModifiedAt());
+            pstmt.setLong(4, schedule.getScheduleId());
+
+            pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            throw new RuntimeException("일정 수정 실패", e);
+        }
+    }
+
+    public void deleteSchedule(Long id) {
+        String sql = "DELETE FROM schedule WHERE SCHEDULE_ID = ?";
+
+        try (Connection conn = ConnectionManagerLv1.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            throw new RuntimeException("일정 삭제 실패", e);
+        }
+    }
+
 
 }

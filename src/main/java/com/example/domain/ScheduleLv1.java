@@ -1,9 +1,11 @@
 package com.example.domain;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 public class ScheduleLv1 {
     private Long scheduleId;
     private String title;
