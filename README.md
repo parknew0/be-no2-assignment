@@ -1,3 +1,17 @@
+## `application.properties` 설정안내
+
+**DB 접속 정보는 Git에 커밋되지 않도록 `.gitignore`로 관리**하고 있습니다.  
+아래 예시 파일을 참고하여 직접 `application.properties`를 만들어주세요.  
+또는 `src/main/resources/application-example.properties` 파일의 비밀번호만 본인의 MySQL 비밀번호 변경해도 됩니다.  
+⚠️ 주의: `resources`폴더에 `properties` 파일이 두개 이상 존재하면 오류가 나니 하나만 남겨주세요.
+
+### 예시: `src/main/resources/application.properties`
+```properties
+db.url=jdbc:mysql://localhost:3306/schedule_db
+db.username=root
+db.password=본인비밀번호
+```
+---
 # Lv 0. API 명세 및 ERD
 
 ## ✅ API 목록
