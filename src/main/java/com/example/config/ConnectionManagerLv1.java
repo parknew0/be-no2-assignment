@@ -32,8 +32,8 @@ public class ConnectionManagerLv1 {
 
             return DriverManager.getConnection(url, user, pass);
         } catch (Exception e) {
-            e.printStackTrace();  // ← 실제 원인을 출력
-            throw new RuntimeException("❗ DB 연결 실패: 설정 정보 또는 서버 상태를 확인하세요.", e);
+            e.printStackTrace();  // 실제 원인을 출력
+            throw new RuntimeException("DB 연결 실패: 설정 정보 또는 서버 상태를 확인하세요.", e);
         }
     }
 }
