@@ -2,14 +2,14 @@
 
 ## ✅ API 목록
 
-| 기능             | Method | URL                      | Request Body                | Response Body              | 상태 코드                           |
-|------------------|--------|--------------------------|-----------------------------|-----------------------------|--------------------------------------|
-| 일정 등록        | POST   | `/schedules`             | 일정 정보 + 비밀번호         | 등록된 일정 정보             | `200 OK`                            |
+| 기능             | Method | URL                      | Request Body                | Response Body              | 상태 코드                               |
+|------------------|--------|--------------------------|-----------------------------|-----------------------------|-------------------------------------|
+| 일정 등록        | POST   | `/schedules`             | 일정 정보 + 비밀번호         | 등록된 일정 정보             | `201 Created`                       |
 | 일정 목록 조회    | GET    | `/schedules`             | 없음                        | 일정 목록                    | `200 OK`                            |
 | 일정 상세 조회    | GET    | `/schedules/{id}`        | 없음                        | 일정 정보                    | `200 OK`<br>`404 Not Found`         |
-| 일정 수정        | PUT    | `/schedules/{id}`        | 수정할 일정 정보 + 비밀번호  | 수정 완료 메시지             | `200 OK`<br>`403 Forbidden`         |
-| 일정 삭제        | DELETE | `/schedules/{id}`        | 비밀번호                    | 삭제 완료 메시지             | `200 OK`<br>`403 Forbidden`         |
-| 일정 상태 변경   | PATCH  | `/schedules/{id}/status` | 상태값 + 비밀번호            | 상태 변경 완료 메시지         | `200 OK`<br>`403 Forbidden`         |
+| 일정 수정        | PUT    | `/schedules/{id}`        | 수정할 일정 정보 + 비밀번호  | 수정 완료 메시지             | `200 OK`<br>`403 Forbidden`<br>`404 Not Found`           |
+| 일정 삭제        | DELETE | `/schedules/{id}`        | 비밀번호                    | 삭제 완료 메시지             | `204 No Content`<br>`403 Forbidden`<br>`404 Not Found`   |
+| 일정 상태 변경   | PATCH  | `/schedules/{id}/status` | 상태값 + 비밀번호            | 상태 변경 완료 메시지         | `200 OK`<br>`403 Forbidden`<br>`404 Not Found`           |
 
 
 
