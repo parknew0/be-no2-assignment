@@ -31,3 +31,7 @@ sourceSets {
 test {
     useJUnitPlatform()
 }
+
+tasks.named('processResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
