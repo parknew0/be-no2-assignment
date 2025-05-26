@@ -14,17 +14,144 @@ db.password=본인비밀번호
 ---
 # Lv 0. API 명세 및 ERD
 
-## ✅ API 목록
+## ✅ API 요약 표
 
-| 기능             | Method | URL                      | Request Body                | Response Body              | 상태 코드                               |
-|------------------|--------|--------------------------|-----------------------------|-----------------------------|-------------------------------------|
-| 일정 등록        | POST   | `/schedules`             | 일정 정보 + 비밀번호         | 등록된 일정 정보             | `201 Created`                       |
-| 일정 목록 조회    | GET    | `/schedules`             | 없음                        | 일정 목록                    | `200 OK`                            |
-| 일정 상세 조회    | GET    | `/schedules/{id}`        | 없음                        | 일정 정보                    | `200 OK`<br>`404 Not Found`         |
-| 일정 수정        | PUT    | `/schedules/{id}`        | 수정할 일정 정보 + 비밀번호  | 수정 완료 메시지             | `200 OK`<br>`403 Forbidden`<br>`404 Not Found`           |
-| 일정 삭제        | DELETE | `/schedules/{id}`        | 비밀번호                    | 삭제 완료 메시지             | `204 No Content`<br>`403 Forbidden`<br>`404 Not Found`   |
-| 일정 상태 변경   | PATCH  | `/schedules/{id}/status` | 상태값 + 비밀번호            | 상태 변경 완료 메시지         | `200 OK`<br>`403 Forbidden`<br>`404 Not Found`           |
+| 기능             | Method | URL                      | Request Body     | Response Body              | 상태 코드                               |
+|------------------|--------|--------------------------|------------------|-----------------------------|-------------------------------------|
+| 일정 등록        | POST   | `/schedules`             | ```json{}```        | 등록된 일정 정보             | `201 Created`                       |
+| 일정 목록 조회    | GET    | `/schedules`             | 없음               | 일정 목록                    | `200 OK`                            |
+| 일정 상세 조회    | GET    | `/schedules/{id}`        | 없음               | 일정 정보                    | `200 OK`<br>`404 Not Found`         |
+| 일정 수정        | PUT    | `/schedules/{id}`        | 수정할 일정 정보 + 비밀번호 | 수정 완료 메시지             | `200 OK`<br>`403 Forbidden`<br>`404 Not Found`           |
+| 일정 삭제        | DELETE | `/schedules/{id}`        | 비밀번호             | 삭제 완료 메시지             | `204 No Content`<br>`403 Forbidden`<br>`404 Not Found`   |
 
+
+## ✅ API 상세 목록
+
+---
+
+### 📌 일정 등록
+- **Method**: POST
+- **URL**: `/schedules`
+- **Request Body**
+  ```
+  {
+  "title": "회의 준비",
+  "content": "회의 자료 작성",
+  "writer": "홍길동",
+  "password": "1234"
+  }
+  ```
+
+- **Response Body**
+  ```
+  {
+  "scheduleId": 1,
+  "title": "회의 준비",
+  "content": "회의 자료 작성",
+  "writer": "홍길동",
+  "createdAt": "2025-05-26 10:00:00",
+  "modifiedAt": "2025-05-26 10:00:00"
+  }
+  ```
+
+- **Status Code**: `201 Created`
+
+---
+
+### 📌 일정 목록 조회
+- **Method**: GET
+- **URL**: `/schedules?writer=홍길동&modifiedAt=2025-05-26`
+
+- **Response Body**
+  ```
+  [
+  {
+  "scheduleId": 1,
+  "title": "회의 준비",
+  "writer": "홍길동",
+  "modifiedAt": "2025-05-26"
+  },
+  {
+  "scheduleId": 2,
+  "title": "프로젝트 회의",
+  "writer": "홍길동",
+  "modifiedAt": "2025-05-25"
+  }
+  ]
+  ```
+
+- **Status Code**: `200 OK`
+
+---
+
+### 📌 일정 상세 조회
+- **Method**: GET
+- **URL**: `/schedules/1`
+
+- **Response Body**
+  ```
+  {
+  "scheduleId": 1,
+  "title": "회의 준비",
+  "content": "회의 자료 작성",
+  "writer": "홍길동",
+  "createdAt": "2025-05-26 10:00:00",
+  "modifiedAt": "2025-05-26 10:00:00"
+  }
+  ```
+
+- **Status Code**:
+    - `200 OK`
+    - `404 Not Found`
+
+---
+
+### 📌 일정 수정
+- **Method**: PUT
+- **URL**: `/schedules/1`
+
+- **Request Body**
+  ```
+  {
+  "title": "회의 준비 (수정)",
+  "writer": "홍길동",
+  "password": "1234"
+  }
+  ```
+
+- **Response Body**
+  ```
+  {
+  "message": "일정이 성공적으로 수정되었습니다."
+  }
+  ```
+
+- **Status Code**:
+    - `200 OK`
+    - `403 Forbidden`
+    - `404 Not Found`
+
+---
+
+### 📌 일정 삭제
+- **Method**: DELETE
+- **URL**: `/schedules/1`
+
+- **Request Body**
+  ```
+  {
+  "password": "1234"
+  }
+  ```
+
+- **Response Body**: 없음 (`204 No Content`)
+
+- **Status Code**:
+    - `204 No Content`
+    - `403 Forbidden`
+    - `404 Not Found`
+
+---
 
 
 ## 🔐 공통 에러 응답
