@@ -1,21 +1,28 @@
 package com.example.repository;
 
-import com.example.config.ConnectionManagerLv1;
 import com.example.domain.ScheduleLv1;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import javax.sql.DataSource;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ScheduleRepositoryLv1 {
 
-    public void insertSchedule(ScheduleLv1 schedule) {
-        String sql = "INSERT INTO schedule (TITLE, CONTENT, WRITER, PASSWORD, CREATED_AT, MODIFIED_AT) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+    private final DataSource dataSource;
 
-        try (Connection conn = ConnectionManagerLv1.getConnection();
+    @Autowired
+    public ScheduleRepositoryLv1(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public void insertSchedule(ScheduleLv1 schedule) {
+        String sql = "INSERT INTO schedule (TITLE, CONTENT, WRITER, PASSWORD, CREATED_AT, MODIFIED_AT) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, schedule.getTitle());
@@ -26,26 +33,21 @@ public class ScheduleRepositoryLv1 {
             pstmt.setObject(6, schedule.getModifiedAt());
 
             pstmt.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException("일정 저장 실패", e);
         }
     }
 
     public List<ScheduleLv1> findSchedules(String writer, String modifiedAt) {
         List<ScheduleLv1> result = new ArrayList<>();
-
         StringBuilder sql = new StringBuilder("SELECT * FROM schedule WHERE 1=1");
 
-        if (writer != null) {
-            sql.append(" AND WRITER = ?");
-        }
-        if (modifiedAt != null) {
-            sql.append(" AND DATE(MODIFIED_AT) = ?");
-        }
+        if (writer != null) sql.append(" AND WRITER = ?");
+        if (modifiedAt != null) sql.append(" AND DATE(MODIFIED_AT) = ?");
 
         sql.append(" ORDER BY MODIFIED_AT DESC");
 
-        try (Connection conn = ConnectionManagerLv1.getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
             int idx = 1;
@@ -65,7 +67,7 @@ public class ScheduleRepositoryLv1 {
                 ));
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException("일정 목록 조회 실패", e);
         }
 
@@ -75,7 +77,7 @@ public class ScheduleRepositoryLv1 {
     public ScheduleLv1 findScheduleById(Long id) {
         String sql = "SELECT * FROM schedule WHERE SCHEDULE_ID = ?";
 
-        try (Connection conn = ConnectionManagerLv1.getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setLong(1, id);
@@ -93,7 +95,7 @@ public class ScheduleRepositoryLv1 {
                 );
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException("일정 단건 조회 실패", e);
         }
 
@@ -103,7 +105,7 @@ public class ScheduleRepositoryLv1 {
     public void updateSchedule(ScheduleLv1 schedule) {
         String sql = "UPDATE schedule SET TITLE = ?, WRITER = ?, MODIFIED_AT = ? WHERE SCHEDULE_ID = ?";
 
-        try (Connection conn = ConnectionManagerLv1.getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, schedule.getTitle());
@@ -112,8 +114,7 @@ public class ScheduleRepositoryLv1 {
             pstmt.setLong(4, schedule.getScheduleId());
 
             pstmt.executeUpdate();
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException("일정 수정 실패", e);
         }
     }
@@ -121,16 +122,14 @@ public class ScheduleRepositoryLv1 {
     public void deleteSchedule(Long id) {
         String sql = "DELETE FROM schedule WHERE SCHEDULE_ID = ?";
 
-        try (Connection conn = ConnectionManagerLv1.getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setLong(1, id);
             pstmt.executeUpdate();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException("일정 삭제 실패", e);
         }
     }
-
-
 }

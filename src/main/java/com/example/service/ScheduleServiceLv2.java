@@ -2,14 +2,18 @@ package com.example.service;
 
 import com.example.domain.ScheduleLv1;
 import com.example.dto.ScheduleUpdateRequestDtoLv2;
-import com.example.repository.ScheduleRepositoryLv1;
 import com.example.dto.ScheduleDeleteRequestDtoLv2;
+import com.example.repository.ScheduleRepositoryLv1;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Service
+@RequiredArgsConstructor
 public class ScheduleServiceLv2 {
 
-    private final ScheduleRepositoryLv1 scheduleRepository = new ScheduleRepositoryLv1();
+    private final ScheduleRepositoryLv1 scheduleRepository;
 
     public boolean updateSchedule(Long id, ScheduleUpdateRequestDtoLv2 dto) {
         ScheduleLv1 schedule = scheduleRepository.findScheduleById(id);
@@ -40,5 +44,4 @@ public class ScheduleServiceLv2 {
     public ScheduleLv1 findScheduleById(Long id) {
         return scheduleRepository.findScheduleById(id);
     }
-
 }

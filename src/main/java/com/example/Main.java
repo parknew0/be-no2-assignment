@@ -1,16 +1,11 @@
 package com.example;
 
-import static spark.Spark.port;
-import static spark.Spark.init;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.controller.ScheduleControllerLv1;
-import com.example.controller.ScheduleControllerLv2;
-
+@SpringBootApplication  // 스프링부트 애플리케이션의 진입점
 public class Main {
     public static void main(String[] args) {
-        port(8080); // 원하는 포트 설정
-        ScheduleControllerLv1.registerRoutes();
-        ScheduleControllerLv2.registerRoutes();
-        init(); // Spark 서버 초기화
+        SpringApplication.run(Main.class, args);  // 내장 톰캣 실행 및 컴포넌트 스캔
     }
 }
